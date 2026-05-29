@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.png
+*.jpg
+.DS_Store
+# design artifacts kept locally, not in source (uptyme/bewthr convention)
+RDA-*.html
+starnav-mock-*.html
