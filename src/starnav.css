@@ -17,6 +17,12 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
+/* Global scroll lockdown (bewthr gold standard): hide the page scrollbar and
+   stop overscroll/rubber-band chaining so the page never shows a scroll line
+   and no full-screen overlay can be dragged past itself. */
+html, body { overscroll-behavior: none; }
+html { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar { display: none; }
 body {
   background: var(--void); color: var(--text);
   font-family: var(--mono); font-size: 13px;
@@ -120,6 +126,9 @@ body {
 .places-view {
   position: fixed; inset: 0; z-index: 200; background: linear-gradient(180deg, #070E28 0%, #04060F 100%);
   color: var(--text); display: none; flex-direction: column;
+  /* Clip the overlay so it can never scroll/drag past itself — only the inner
+     results/saved lists scroll (scrollbars hidden, overscroll contained). */
+  overflow: hidden;
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
 .places-view.open { display: flex; }
