@@ -24,17 +24,27 @@ By **Bert Peters**.
 
 ## What it does
 
-- **Point-me**: device-orientation aware. Aim your phone at the sky and starnav identifies what's overhead.
-- **Arc-min engine**: precise positions for sun, moon, planets, and constellations from your coordinates.
+- **Point-me**: device-orientation aware. Aim your phone at the sky and starnav identifies what's overhead, with turn / tilt directions to the next target.
+- **Arc-min engine**: precise positions for sun, moon, planets, and constellations — computed from your coordinates, locally.
 - **Dual search**: find places + find objects in one bar.
-- **Themed settings**: light / dark / sky-matched theme.
+- **Target picker**: pick a celestial object as your target; starnav guides you to it with bearing + altitude deltas.
+- **Themed settings**: light / dark / sky-matched theme; font and animation controls.
 - **Atmospheric starfield** behind the navigator UI.
-- Installable PWA; works offline once cached.
-- Local-first: on-device astronomy, zero runtime network calls for sky math.
+- **Installable PWA.** Works offline once cached.
+- **Local-first by lock.** Zero runtime network for the sky math. The only network call in the entire app is the geocoding search you explicitly trigger.
+
+## Data sources
+
+- **Planet positions**: VSOP-style Keplerian elements (Mercury through Neptune) in `src/engine/planets.ts`, computed locally per JPL low-precision standard. **No network.**
+- **Star catalog**: bright-star data baked into `src/engine/stars.ts`. **No network.**
+- **Constellation lines**: bundled in the engine. **No network.**
+- **Sun + sidereal time**: NOAA / Meeus formulas in `src/engine/altaz.ts`. **No network.**
+- **Device orientation**: `DeviceOrientationEvent` (iOS asks permission first). Local browser API.
+- **City search (explicit, user-triggered only)**: [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api) (keyless), used by `src/engine/observer.ts` when the user types in the city search.
 
 ## Stack
 
-React 19 · Vite · TypeScript · Space Grotesk · JetBrains Mono · vite-plugin-pwa.
+React 19 · Vite · TypeScript · Space Grotesk · JetBrains Mono · vite-plugin-pwa · Vitest.
 
 ## Develop
 
@@ -50,13 +60,34 @@ npm run test
 
 ```
 src/
-  components/   # search bar, sky panel, settings, themed UI
-  hooks/        # device orientation, arc-min positions
-  lib/          # astronomy + geocoding
-  store/        # settings, places (persisted)
-public/         # PWA manifest + icons
+  engine/
+    altaz.ts          # alt/az from RA/Dec + observer + time (NOAA / Meeus)
+    observer.ts       # observer location + city search (Open-Meteo)
+    planets.ts        # Keplerian planet positions
+    stars.ts          # bright-star catalog
+    tick.ts           # animation pulse
+    engine.test.ts    # verification
+  sky/
+    pointme.ts        # device-orientation → camera target math
+    projection.ts     # sky → screen
+    format.ts         # display formatting
+  hooks/
+    useFitScale.ts    # scale-to-fit
+    useVisualViewport.ts
+  lib/
+    PwaUpdate.tsx     # registerSW wrapper
+  components/
+    UpdateBanner.tsx  # SW update prompt
+  store/
+    settings.ts       # zustand store (persisted)
+  App.tsx
+  CitySearch.tsx      # city search panel
+  TargetPicker.tsx    # celestial target picker
+  Settings.tsx        # settings UI
+  main.tsx
+public/                # PWA manifest + icons
 docs/
-  screenshots/  # README images
+  screenshots/        # README images
 ```
 
 ## Related
