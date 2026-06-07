@@ -6,3 +6,6 @@ dist/
 # design artifacts kept locally, not in source (uptyme/bewthr convention)
 RDA-*.html
 starnav-mock-*.html
+
+# but docs/screenshots/*.png ARE tracked (used by README)
+!docs/screenshots/*.png
