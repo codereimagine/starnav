@@ -1,98 +1,63 @@
+<div align="center">
+
 # starnav
 
-A night-sky navigator. The **space** axis of codereimagine.
+### A night-sky navigator — point your device at the sky and starnav tells you what you're looking at.
 
-Live: [codereimagine.github.io/starnav](https://codereimagine.github.io/starnav/)
+*No accounts, no trackers, no ads — private by design.*
 
-By **Bert Peters**.
+**▶ Live — [codereimagine.github.io/starnav](https://codereimagine.github.io/starnav/)**
 
-## Screenshots
+<p>
+  <img src="docs/screenshots/starnav-mobile.png" width="30%" alt="starnav on mobile — night-sky navigator identifying what's overhead" />
+  <img src="docs/screenshots/starnav-desktop.png" width="58%" alt="starnav on desktop — sun, moon, planets and constellations for your location" />
+</p>
 
-<table>
-  <tr>
-    <th>Mobile</th>
-    <th>Desktop</th>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/starnav-mobile.png" alt="starnav — mobile" width="280"></td>
-    <td><img src="docs/screenshots/starnav-desktop.png" alt="starnav — desktop" width="500"></td>
-  </tr>
-  <tr>
-    <td colspan="2"><sub>Point your device at the sky; starnav tells you what you're looking at. Sun, moon, planets, constellations — all computed in-browser.</sub></td>
-  </tr>
-</table>
+<sub>Aim your phone at the sky — starnav identifies sun, moon, planets and constellations, all computed in-browser.</sub>
+
+**By Bert Peters** · the **space** axis of [codereimagine](https://github.com/codereimagine).
+
+</div>
+
+---
+
+Aim your device at the sky and starnav identifies what's overhead — sun, moon, planets, constellations — with turn/tilt directions to your next target, all computed on-device.
 
 ## What it does
 
-- **Point-me**: device-orientation aware. Aim your phone at the sky and starnav identifies what's overhead, with turn / tilt directions to the next target.
-- **Arc-min engine**: precise positions for sun, moon, planets, and constellations — computed from your coordinates, locally.
-- **Dual search**: find places + find objects in one bar.
-- **Target picker**: pick a celestial object as your target; starnav guides you to it with bearing + altitude deltas.
-- **Themed settings**: light / dark / sky-matched theme; font and animation controls.
-- **Atmospheric starfield** behind the navigator UI.
+- **Point-me.** Device-orientation aware — aim your phone at the sky and starnav identifies what's overhead, with turn/tilt directions to the next target.
+- **Arc-minute engine.** Precise positions for sun, moon, planets and constellations, computed from your coordinates locally.
+- **Dual search.** Find places *and* find objects in one bar.
+- **Target picker.** Pick a celestial object; starnav guides you to it with bearing + altitude deltas.
+- **Themed.** Light / dark / sky-matched theme, with font and animation controls.
 - **Installable PWA.** Works offline once cached.
-- **Local-first by lock.** Zero runtime network for the sky math. The only network call in the entire app is the geocoding search you explicitly trigger.
+- **Private by design — no accounts, no trackers, no ads.** Zero runtime network for the sky math; the only outbound call in the whole app is the city search you explicitly trigger. Nothing about you leaves your device.
 
-## Data sources
+## How it computes — all local, no network
 
-- **Planet positions**: VSOP-style Keplerian elements (Mercury through Neptune) in `src/engine/planets.ts`, computed locally per JPL low-precision standard. **No network.**
-- **Star catalog**: bright-star data baked into `src/engine/stars.ts`. **No network.**
-- **Constellation lines**: bundled in the engine. **No network.**
-- **Sun + sidereal time**: NOAA / Meeus formulas in `src/engine/altaz.ts`. **No network.**
-- **Device orientation**: `DeviceOrientationEvent` (iOS asks permission first). Local browser API.
-- **City search (explicit, user-triggered only)**: [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api) (keyless), used by `src/engine/observer.ts` when the user types in the city search.
+- **Planet positions** — VSOP-style Keplerian elements (Mercury–Neptune), JPL low-precision standard, in `src/engine/planets.ts`.
+- **Stars & constellations** — a bright-star catalog + constellation lines baked into the engine (`src/engine/stars.ts`).
+- **Sun & sidereal time** — NOAA / Meeus formulas in `src/engine/altaz.ts`.
+- **Device orientation** — `DeviceOrientationEvent` (iOS asks permission first), a local browser API.
+- **City search (only when you type it)** — [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api), keyless — the one outbound fetch in the app.
 
-## Stack
+## Tech
 
-React 19 · Vite · TypeScript · Space Grotesk · JetBrains Mono · vite-plugin-pwa · Vitest.
+React 19 · Vite · TypeScript · Space Grotesk + JetBrains Mono · `vite-plugin-pwa` · Vitest. A PWA — installable and offline-capable.
 
-## Develop
+## Run it locally
 
 ```sh
 npm install
 npm run dev       # http://localhost:5173
 npm run build     # tsc --noEmit && vite build
 npm run preview   # serves the production bundle on :4280
-npm run test
+npm run test      # Vitest
 ```
 
-## Project layout
+## The codereimagine trilogy
 
-```
-src/
-  engine/
-    altaz.ts          # alt/az from RA/Dec + observer + time (NOAA / Meeus)
-    observer.ts       # observer location + city search (Open-Meteo)
-    planets.ts        # Keplerian planet positions
-    stars.ts          # bright-star catalog
-    tick.ts           # animation pulse
-    engine.test.ts    # verification
-  sky/
-    pointme.ts        # device-orientation → camera target math
-    projection.ts     # sky → screen
-    format.ts         # display formatting
-  hooks/
-    useFitScale.ts    # scale-to-fit
-    useVisualViewport.ts
-  lib/
-    PwaUpdate.tsx     # registerSW wrapper
-  components/
-    UpdateBanner.tsx  # SW update prompt
-  store/
-    settings.ts       # zustand store (persisted)
-  App.tsx
-  CitySearch.tsx      # city search panel
-  TargetPicker.tsx    # celestial target picker
-  Settings.tsx        # settings UI
-  main.tsx
-public/                # PWA manifest + icons
-docs/
-  screenshots/        # README images
-```
-
-## Related
-
-starnav is one of three axes of codereimagine:
+starnav is one of three axes of [codereimagine](https://github.com/codereimagine):
 
 - **[bewthr](https://github.com/codereimagine/bewthr)** — continuum (weather)
 - **[uptyme](https://github.com/codereimagine/uptyme)** — time
@@ -100,4 +65,4 @@ starnav is one of three axes of codereimagine:
 
 ## License
 
-Apache License 2.0 — see [LICENSE](./LICENSE).
+Apache-2.0.
