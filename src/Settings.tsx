@@ -121,7 +121,7 @@ export function Settings({ open, onClose }: Props) {
         </div>
 
         <div className="settings-section">
-          <div className="set-foot">star<span className="a">nav</span> v0.1 · open source · built with claude opus</div>
+          <div className="set-foot">star<span className="a">nav</span> · built with claude opus</div>
         </div>
       </div>
     </div>

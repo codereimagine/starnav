@@ -243,9 +243,10 @@ export function App() {
           </div>
           {live.state.error && <div className="hint">{live.state.error}</div>}
 
-          <div className="foot">star<span className="a">nav</span> v0.1 · open source</div>
         </div>
       </div>
+
+      <div className="foot">star<span className="a">nav</span></div>
 
       <TargetPicker open={pickerOpen} objects={objects} targetName={targetName} onPick={pick} onClose={() => setPickerOpen(false)} />
       <CitySearch open={cityOpen} observer={observer} onSet={setPlace} onClose={() => setCityOpen(false)} />

@@ -118,7 +118,7 @@ body {
 .btn-active { background: rgba(127,230,200,0.16); color: var(--good); border: 1px solid rgba(127,230,200,0.6); text-shadow: 0 0 8px rgba(127,230,200,0.4); }
 .btn-ghost { background: rgba(8,12,28,0.4); color: var(--dim); border: 1px solid var(--line-2); }
 .hint { position: relative; z-index: 4; margin: 9px 18px 0; text-align: center; font-size: 10px; letter-spacing: 1px; color: #FF9B7A; }
-.foot { position: relative; z-index: 4; text-align: center; padding: 16px 18px 0; color: var(--dim); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+.foot { position: fixed; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 4; text-align: center; color: var(--dim); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; pointer-events: none; }
 .foot .a { color: var(--cyan); }
 
 /* ── full-screen overlays (picker + settings) — trilogy PlacesView shell:
