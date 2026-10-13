@@ -19,7 +19,8 @@ export interface Place {
   source: 'search';
 }
 
-export const DEFAULT_OBSERVER: Observer = { lat: 40.21, lon: -74.04, name: 'default', source: 'default' };
+// Greenwich (Royal Observatory) — a neutral zero-meridian default; never a real user's location.
+export const DEFAULT_OBSERVER: Observer = { lat: 51.4779, lon: -0.0015, name: 'default', source: 'default' };
 const STORE_KEY = 'starnav.observer';
 
 /** Try the on-device geolocation sensor. */
