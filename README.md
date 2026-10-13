@@ -1,72 +1,80 @@
 <div align="center">
 
-# starnav
+# 🌌 starnav
 
-### A night-sky navigator — point your device at the sky and starnav tells you what you're looking at.
+### Point your phone at the sky and find out what you're looking at.
 
-*No accounts, no trackers, no ads — private by design.*
+*No accounts, no sign-up, no ads — and your exact location never leaves your device.*
 
-**▶ Live — [codereimagine.github.io/starnav](https://codereimagine.github.io/starnav/)**
+**▶ Open it — [codereimagine.github.io/starnav](https://codereimagine.github.io/starnav/)**
 
+<sub>The night-sky navigator — in dark and light</sub>
 <p>
-  <img src="docs/screenshots/starnav-mobile.png" width="30%" alt="starnav on mobile — night-sky navigator identifying what's overhead" />
-  <img src="docs/screenshots/starnav-desktop.png" width="58%" alt="starnav on desktop — sun, moon, planets and constellations for your location" />
+  <img src="docs/screenshots/navigator-dark.png" width="40%" alt="starnav navigator, dark theme — stars, planets and a target with turn/tilt directions" />
+  <img src="docs/screenshots/navigator-light.png" width="40%" alt="starnav navigator, light theme — the same sky instrument on a lighter sky" />
 </p>
 
-<sub>Aim your phone at the sky — starnav identifies sun, moon, planets and constellations, all computed in-browser.</sub>
-
-**By Bert Peters** · the **space** axis of [codereimagine](https://github.com/codereimagine).
+<sub>By <b>Bert Peters</b> · the <b>space</b> axis of <a href="https://github.com/codereimagine">codereimagine</a></sub>
 
 </div>
 
 ---
 
-Aim your device at the sky and starnav identifies what's overhead — sun, moon, planets, constellations — with turn/tilt directions to your next target, all computed on-device.
+## 🔭 What is it?
 
-## What it does
+starnav is a stargazing guide. Point your phone at the sky — or just browse — and it tells you **what's up there**: the stars, planets and constellations overhead. Pick anything you want to find, and it shows you exactly which way to **turn and tilt** to put it right in front of you.
 
-- **Point-me.** Device-orientation aware — aim your phone at the sky and starnav identifies what's overhead, with turn/tilt directions to the next target.
-- **Arc-minute engine.** Precise positions for sun, moon, planets and constellations, computed from your coordinates locally.
-- **Dual search.** Find places *and* find objects in one bar.
-- **Target picker.** Pick a celestial object; starnav guides you to it with bearing + altitude deltas.
-- **Themed.** Light / dark / sky-matched theme, with font and animation controls.
-- **Installable PWA.** Works offline once cached.
-- **Private by design — no accounts, no trackers, no ads.** Zero runtime network for the sky math; the only outbound call in the whole app is the city search you explicitly trigger. Nothing about you leaves your device.
+No app store, no account, nothing to sign up for. Open the link and it works. Like it? Add it to your home screen like any other app.
 
-## How it computes — all local, no network
+## ✨ How we do things differently
 
-- **Planet positions** — VSOP-style Keplerian elements (Mercury–Neptune), JPL low-precision standard, in `src/engine/planets.ts`.
-- **Stars & constellations** — a bright-star catalog + constellation lines baked into the engine (`src/engine/stars.ts`).
-- **Sun & sidereal time** — NOAA / Meeus formulas in `src/engine/altaz.ts`.
-- **Device orientation** — `DeviceOrientationEvent` (iOS asks permission first), a local browser API.
-- **City search (only when you type it)** — [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api), keyless — the one outbound fetch in the app.
+Most apps want your account, your data, and your attention. Every codereimagine app is built the other way round:
 
-## Tech
+- **Private by default** — no accounts, no tracking, nothing sold. Your exact location stays on *your* device.
+- **No ads, no clutter** — nothing on the screen is trying to sell you something.
+- **Yours to keep** — installs like an app and keeps working offline, even on a weak signal.
+- **Fully open & free** — the whole thing is public (Apache-2.0). Nothing hidden.
+- **Made to feel good** — an everyday tool should be beautiful, not just functional.
 
-React 19 · Vite · TypeScript · Space Grotesk + JetBrains Mono · `vite-plugin-pwa` · Vitest. A PWA — installable and offline-capable.
+## 👀 What you can do with it
 
-## Run it locally
+- **See what's overhead** — the real positions of the stars, planets and constellations for where you are.
+- **Point me there** — pick a target and starnav guides you to it: turn this way, tilt up that much.
+- **Find anything** — one search bar for both places and sky objects.
+- **Anywhere** — fast on phones and computers.
 
-```sh
-npm install
-npm run dev       # http://localhost:5173
-npm run build     # tsc --noEmit && vite build
-npm run preview   # serves the production bundle on :4280
-npm run test      # Vitest
+## 🛠️ Run or build it yourself (developers)
+
+```bash
+git clone https://github.com/codereimagine/starnav.git
+cd starnav && npm install
+npm run dev        # local dev server
+npm run build      # production build → dist/
+npm run preview    # preview the production build
+npm test           # unit tests
 ```
 
-## The codereimagine trilogy
+<details><summary><b>🔧 Under the hood</b></summary>
 
-starnav is one of three axes of [codereimagine](https://github.com/codereimagine):
+- **Planets:** JPL/Standish low-precision Keplerian elements (1800–2050), Mercury–Neptune, in `src/engine/planets.ts`.
+- **Stars & constellations:** a bright-star catalog + constellation lines baked into the engine (`src/engine/stars.ts`).
+- **Coordinate math:** sidereal time and alt-az via NOAA / Meeus formulas in `src/engine/altaz.ts`.
+- **Pointing:** `DeviceOrientationEvent` (iOS asks permission first) — a local browser sensor, no network.
+- **Location:** browser geolocation, or a city search if you prefer a name; coordinates stay on-device, never reverse-geocoded.
+- **City search:** [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api), keyless — the only outbound call in the whole app, and only when you type it.
+- **Stack:** React 19 · TypeScript · Vite · `vite-plugin-pwa` · Vitest.
 
-- **[bewthr](https://github.com/codereimagine/bewthr)** — continuum (weather)
-- **[uptyme](https://github.com/codereimagine/uptyme)** — time
-- **starnav** — space
+</details>
 
-## Credits
+## 🙌 Credits & thanks
 
-Built with [Claude Code](https://claude.com/claude-code).
+Built with [Claude Code](https://claude.com/claude-code). Nothing here is hidden — starnav stands on:
 
-## License
+- **Geocoding** — [Open-Meteo](https://open-meteo.com) (CC BY 4.0).
+- **Astronomy** — JPL low-precision planetary ephemerides, and coordinate math (sidereal time, alt-az) from NOAA / Jean Meeus's *Astronomical Algorithms*.
+- **Fonts** — Space Grotesk & JetBrains Mono (SIL Open Font License 1.1).
+- **Emoji** — standard Unicode, drawn by your device.
 
-[Apache-2.0](LICENSE).
+## 📄 License
+
+Apache-2.0 — see [LICENSE](LICENSE).
