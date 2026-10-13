@@ -19,9 +19,7 @@ export function useFitScale(ref: RefObject<HTMLElement | null>): number {
 
     const compute = () => {
       const availW = vv.width || window.innerWidth;
-      // Reserve space at the bottom for the fixed .foot wordmark so the scaled
-      // stage never grows into it (the POINT ME / BROWSE SKY row was overlapping it).
-      const availH = (vv.height || window.innerHeight) - 40;
+      const availH = vv.height || window.innerHeight;
       const natW = el.offsetWidth;
       const natH = el.offsetHeight;
       if (!natW || !natH || !availW || !availH) return;
