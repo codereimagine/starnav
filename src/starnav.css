@@ -33,6 +33,7 @@ body {
 /* ── fit-to-screen architecture ── */
 .sky {
   position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  min-height: 100vh; min-height: 100lvh;   /* stretch to the largest viewport so iOS can't leave a gap at the bottom */
   background:
     radial-gradient(150% 70% at 50% 100%, rgba(58,40,86,0.18) 0%, transparent 55%),
     radial-gradient(120% 95% at 50% 0%, #122657 0%, #0B1740 30%, #070E28 60%, var(--void) 100%);
@@ -43,6 +44,7 @@ body {
 
 .stage-wrap {
   position: fixed; inset: 0; z-index: 2; display: grid;
+  min-height: 100vh; min-height: 100lvh;   /* stretch to the largest viewport (match .sky) */
   justify-items: center; align-items: start; overflow: hidden;
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
