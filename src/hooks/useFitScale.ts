@@ -18,18 +18,8 @@ export function useFitScale(ref: RefObject<HTMLElement | null>): number {
     if (!el) return;
 
     const compute = () => {
-      let availW = vv.width || window.innerWidth;
-      let availH = vv.height || window.innerHeight;
-      // The stage reserves the safe-area insets as padding, so the phone must
-      // fit the stage's CONTENT box, not the raw viewport — otherwise it scales
-      // to the full height then gets shoved down by the top inset and spills
-      // past the bottom (the "bleed").
-      const parent = el.parentElement;
-      if (parent) {
-        const cs = getComputedStyle(parent);
-        availW -= parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-        availH -= parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-      }
+      const availW = vv.width || window.innerWidth;
+      const availH = vv.height || window.innerHeight;
       const natW = el.offsetWidth;
       const natH = el.offsetHeight;
       if (!natW || !natH || !availW || !availH) return;
