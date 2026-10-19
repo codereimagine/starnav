@@ -121,7 +121,7 @@ body {
 .btn-ghost { background: rgba(8,12,28,0.4); color: var(--dim); border: 1px solid var(--line-2); }
 .hint { position: relative; z-index: 4; margin: 9px 18px 0; text-align: center; font-size: 10px; letter-spacing: 1px; color: #FF9B7A; }
 /* in-flow wordmark (below the action row) — never a fixed overlay, so it can't collide with the buttons on any viewport / safe-area */
-.foot { margin: 16px 0 0; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); text-align: center; color: var(--dim); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; pointer-events: none; }
+.foot { margin: 16px 0 0; padding-bottom: 10px; text-align: center; color: var(--dim); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; pointer-events: none; }  /* bottom safe-area is reserved once, by .stage-wrap's padding — not doubled here */
 .foot .a { color: var(--cyan); }
 
 /* ── full-screen overlays (picker + settings) — trilogy PlacesView shell:
