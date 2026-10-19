@@ -16,7 +16,7 @@
   --display: 'Space Grotesk Variable', 'JetBrains Mono Variable', ui-sans-serif, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
+html, body { height: 100%; background: var(--void); }
 /* Global scroll lockdown (bewthr gold standard): hide the page scrollbar and
    stop overscroll/rubber-band chaining so the page never shows a scroll line
    and no full-screen overlay can be dragged past itself. */
