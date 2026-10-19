@@ -4,6 +4,8 @@
 
 ### Point your phone at the sky and find out what you're looking at.
 
+$\textcolor{#A6E4FF}{\textsf{aim}}$ · $\textcolor{#F0CE96}{\textsf{bearing}}$ · $\textcolor{#7FE6C8}{\textsf{found}}$
+
 *No accounts, no sign-up, no ads — and your exact location never leaves your device.*
 
 **▶ Open it — [codereimagine.github.io/starnav](https://codereimagine.github.io/starnav/)**
@@ -22,13 +24,13 @@
 
 ## 🔭 What is it?
 
-starnav is a stargazing guide. Point your phone at the sky — or just browse — and it tells you **what's up there**: the stars, planets and constellations overhead. Pick anything you want to find, and it shows you exactly which way to **turn and tilt** to put it right in front of you.
+starnav is a stargazing guide. Point your phone at the sky — or just browse — and it tells you $\textcolor{#A6E4FF}{\textsf{what's up there}}$: the stars, planets and constellations overhead. Pick anything you want to find, and it shows you exactly which way to $\textcolor{#F0CE96}{\textsf{turn and tilt}}$ to put it right in front of you.
 
 No app store, no account, nothing to sign up for. Open the link and it works. Like it? Add it to your home screen like any other app.
 
 ## ✨ How we do things differently
 
-Most apps want your account, your data, and your attention. Every codereimagine app is built the other way round:
+Most apps want your account, your data, and your attention. Every codereimagine app is built $\textcolor{#A6E4FF}{\textsf{the other way round}}$:
 
 - **Private by default** — no accounts, no tracking, nothing sold. Your exact location stays on *your* device.
 - **No ads, no clutter** — nothing on the screen is trying to sell you something.
@@ -68,7 +70,7 @@ npm test           # unit tests
 
 ## 🙌 Credits & thanks
 
-Built with [Claude Code](https://claude.com/claude-code). Nothing here is hidden — starnav stands on:
+Built with [Claude Code](https://claude.com/claude-code). $\textcolor{#7FE6C8}{\textsf{Nothing here is hidden}}$ — starnav stands on:
 
 - **Geocoding** — [Open-Meteo](https://open-meteo.com) (CC BY 4.0).
 - **Astronomy** — JPL low-precision planetary ephemerides, and coordinate math (sidereal time, alt-az) from NOAA / Jean Meeus's *Astronomical Algorithms*.
