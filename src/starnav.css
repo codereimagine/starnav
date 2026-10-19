@@ -32,8 +32,8 @@ body {
 
 /* ── fit-to-screen architecture ── */
 .sky {
-  position: fixed; inset: 0; z-index: 0; overflow: hidden;
-  height: 100vh; height: 100lvh; height: var(--vph, 100lvh);   /* pin to the real visible viewport (JS sets --vph); fallbacks for first paint */
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 0; overflow: hidden;
+  height: 100vh; height: 100lvh;   /* cover the LARGEST viewport so retracting mobile browser chrome can never expose a black strip at the bottom */
   background:
     radial-gradient(150% 70% at 50% 100%, rgba(58,40,86,0.18) 0%, transparent 55%),
     radial-gradient(120% 95% at 50% 0%, #122657 0%, #0B1740 30%, #070E28 60%, var(--void) 100%);
@@ -43,8 +43,8 @@ body {
 @keyframes tw { 0%, 100% { opacity: .2; } 50% { opacity: .85; } }
 
 .stage-wrap {
-  position: fixed; inset: 0; z-index: 2; display: grid;
-  height: 100vh; height: 100lvh; height: var(--vph, 100lvh);   /* pin to the real visible viewport (match .sky) */
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 2; display: grid;
+  height: 100vh; height: 100lvh;   /* match .sky — content lays out over the full largest viewport */
   justify-items: center; align-items: start; overflow: hidden;
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
