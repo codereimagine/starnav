@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { geolocate, searchPlaces, type Observer, type Place } from './engine/observer';
+import { searchPlaces, type Observer, type Place } from './engine/observer';
 
 interface Props {
   open: boolean;
   observer: Observer;
   onSet: (o: Observer) => void;
+  /** bewthr's one-tap locate (App): turns location ON if off, else re-acquires —
+   *  GPS, else approximate network location. */
+  onLocate: () => void;
   onClose: () => void;
 }
 
@@ -24,7 +27,7 @@ function persistSaved(list: SavedPlace[]): void {
   try { localStorage.setItem(SAVED_KEY, JSON.stringify(list)); } catch { /* ignore */ }
 }
 
-export function CitySearch({ open, observer, onSet, onClose }: Props) {
+export function CitySearch({ open, observer, onSet, onLocate, onClose }: Props) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Place[]>([]);
   const [searching, setSearching] = useState(false);
@@ -89,16 +92,11 @@ export function CitySearch({ open, observer, onSet, onClose }: Props) {
     addSaved({ name: p.name, region, lat: p.lat, lon: p.lon });
     setLocation(name, p.lat, p.lon);
   }
-  async function useGps() {
-    setSearchError(false);
-    try {
-      const o = await geolocate();
-      onSet({ ...o, name: 'my location' });
-      onClose();
-    } catch {
-      setSearchError(true);
-    }
+  function locateMe() {
+    onLocate();   // result lands in the header readout (LOCATING… → place)
+    onClose();
   }
+
 
   const here = observer.name && observer.name !== 'default' ? observer.name : 'Default';
   const q = query.trim();
@@ -125,7 +123,7 @@ export function CitySearch({ open, observer, onSet, onClose }: Props) {
       <div className="places-view-current">
         <div className="places-view-current-label">current</div>
         <div className="places-view-current-value"><b>{here}</b><span className="places-view-coord">{fmtLatLon(observer.lat, observer.lon)}</span></div>
-        <button type="button" className="pv-gps" onClick={() => void useGps()}>{'◎ '}use my location</button>
+        <button type="button" className="pv-gps" onClick={locateMe}>{'◎ '}use my location</button>
       </div>
 
       <div className="places-view-results" role="listbox" aria-label="Search results">

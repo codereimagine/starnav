@@ -1,9 +1,51 @@
 import { usePwaUpdate } from './lib/PwaUpdate';
 import { useSettings, type Animations, type Smoothness, type StarLabels, type Theme } from './store/settings';
+import type { Observer } from './engine/observer';
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  geoEnabled: boolean;
+  onGeoEnabledChange: (on: boolean) => void;
+  geoSource: Observer['source'];
+  geoLocating: boolean;
+  geoFailed: boolean;
+}
+
+// LOCATION — same switch as bewthr: on by default. This button is the security
+// chokepoint. Off wipes a located position and stops all location use; nothing
+// is acquired or sent. GPS coords stay on-device (they only feed the sky math).
+function LocationSection({ enabled, onChange, source, loading, failed }: {
+  enabled: boolean;
+  onChange: (on: boolean) => void;
+  source: Observer['source'];
+  loading: boolean;
+  failed: boolean;
+}) {
+  let note: string;
+  if (loading) note = 'Getting your location…';
+  else if (!enabled) note = 'Location is off. Nothing is acquired or sent. Turn on, or search a city with ⊕.';
+  else if (failed) note = 'Couldn’t get precise or network location. Search a city with ⊕ instead.';
+  else if (source === 'ip') note = 'On — approximate, from your network (GPS was blocked). Kept on your device. Tap the target button to try GPS again.';
+  else if (source === 'gps') note = 'On — starts automatically each visit, kept on your device. Tap the target button to update.';
+  else note = 'On — tap the target button in the top bar. If GPS is blocked, it uses your approximate network location.';
+
+  return (
+    <div className="settings-section">
+      <div className="settings-section-title">location</div>
+      <button
+        type="button"
+        className="settings-update-check"
+        onClick={() => onChange(!enabled)}
+        // Never disabled (unlike bewthr's): a kill switch must work mid-lookup.
+        aria-busy={loading}
+        aria-pressed={enabled}
+      >
+        {enabled ? 'Location: On — tap to turn off' : 'Location: Off — tap to turn on'}
+      </button>
+      <div className="settings-update-note">{note}</div>
+    </div>
+  );
 }
 
 const THEMES: { value: Theme; label: string; glyph: string }[] = [
@@ -71,7 +113,7 @@ function UpdatesSection() {
   );
 }
 
-export function Settings({ open, onClose }: Props) {
+export function Settings({ open, onClose, geoEnabled, onGeoEnabledChange, geoSource, geoLocating, geoFailed }: Props) {
   const settings = useSettings();
 
   return (
@@ -83,6 +125,8 @@ export function Settings({ open, onClose }: Props) {
       </div>
 
       <div className="settings-view-body">
+        <LocationSection enabled={geoEnabled} onChange={onGeoEnabledChange} source={geoSource} loading={geoLocating} failed={geoFailed} />
+
         <div className="settings-section">
           <div className="settings-section-title">appearance</div>
           <ChipRow<Theme> ariaLabel="Theme" options={THEMES} value={settings.theme} onChange={settings.setTheme} />

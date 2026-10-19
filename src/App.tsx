@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './starnav.css';
 import { createTick } from './engine/tick';
-import { loadObserver, saveObserver, type Observer } from './engine/observer';
+import { DEFAULT_OBSERVER, loadObserver, saveObserver, type Observer } from './engine/observer';
+import { acquireLocation, geoPermissionGranted, readGeoEnabled, writeGeoEnabled, type GeoFix } from './engine/geo';
 import { altAzAt } from './engine/altaz';
 import { STARS } from './engine/stars';
 import { PLANETS, planetAltAz, type PlanetName } from './engine/planets';
@@ -47,6 +48,72 @@ function coordLabel(o: Observer): string {
 export function App() {
   const [observer, setObserver] = useState<Observer>(loadObserver);
   const setPlace = (o: Observer) => { setObserver(o); saveObserver(o); };
+
+  // LOCATION — bewthr's target button + on/off switch (see engine/geo.ts).
+  const [geoEnabled, setGeoEnabledState] = useState(readGeoEnabled);
+  const [locating, setLocating] = useState(false);
+  const [locateFailed, setLocateFailed] = useState(false);
+
+  // The single save point for a fix: refuses when location is OFF, so a request
+  // still in flight when the user switched OFF can't save or apply it.
+  const applyFix = useCallback((fix: GeoFix) => {
+    if (!readGeoEnabled()) return;
+    const o: Observer = fix.approximate
+      ? { lat: fix.lat, lon: fix.lon, name: 'approx. location', source: 'ip' }
+      : { lat: fix.lat, lon: fix.lon, name: 'my location', source: 'gps' };
+    setObserver(o);
+    saveObserver(o);
+    setLocateFailed(false);
+  }, []);
+
+  const acquireNow = useCallback(() => {
+    if (!readGeoEnabled()) return;
+    setLocating(true);
+    setLocateFailed(false);
+    void acquireLocation().then((fix) => {
+      setLocating(false);
+      if (!readGeoEnabled()) return;   // switched OFF mid-flight — drop it
+      if (fix) applyFix(fix);
+      else setLocateFailed(true);
+    });
+  }, [applyFix]);
+
+  // OFF is the kill switch: a located observer (GPS or network) is wiped back to
+  // the default; a searched city is kept. ON acquires right away (a gesture).
+  const setGeoEnabled = useCallback((on: boolean) => {
+    writeGeoEnabled(on);
+    setGeoEnabledState(on);
+    setLocateFailed(false);
+    if (on) {
+      acquireNow();
+      return;
+    }
+    setLocating(false);
+    if (observer.source === 'gps' || observer.source === 'ip') {
+      setObserver(DEFAULT_OBSERVER);
+      saveObserver(DEFAULT_OBSERVER);
+    }
+  }, [acquireNow, observer.source]);
+
+  // bewthr's one-tap locate: turn location ON if it's off, else re-acquire.
+  const locate = useCallback(() => {
+    if (!readGeoEnabled()) setGeoEnabled(true);
+    else acquireNow();
+  }, [setGeoEnabled, acquireNow]);
+
+  // Like bewthr: refresh silently on load only when permission is ALREADY
+  // granted (querying never prompts) — and never over a searched city.
+  useEffect(() => {
+    if (!readGeoEnabled() || loadObserver().source === 'search') return;
+    let cancelled = false;
+    void geoPermissionGranted().then(async (granted) => {
+      if (!granted || cancelled) return;
+      const fix = await acquireLocation();
+      if (fix && !cancelled && loadObserver().source !== 'search') applyFix(fix);
+    });
+    return () => { cancelled = true; };
+  }, [applyFix]);
+
   const [now, setNow] = useState<Date>(() => new Date());
   useEffect(() => {
     const tick = createTick({ intervalMs: 1000, onFrame: setNow });
@@ -103,7 +170,11 @@ export function App() {
   for (let a = Math.ceil((aim.az - 40) / 10) * 10; a <= aim.az + 40; a += 10) tapeTicks.push(a);
   const tapeX = (az: number): number => 190 + angDiff(az, aim.az) * (380 / 80);
 
-  const placeLabel = observer.name && observer.name !== 'default' ? observer.name.toUpperCase() : coordLabel(observer);
+  const placeLabel = locating
+    ? 'LOCATING…'
+    : locateFailed
+      ? 'NO FIX · USE ⊕ FOR CITY'
+      : observer.name && observer.name !== 'default' ? observer.name.toUpperCase() : coordLabel(observer);
 
   return (
     <>
@@ -123,6 +194,17 @@ export function App() {
               <div className="brand-text">star<span className="a">nav</span></div>
             </div>
             <div className="header-actions">
+              {/* Target / locate — same button as bewthr's top bar. */}
+              <button type="button" className="icon-btn" aria-label="Use my location" title="Use my location" onClick={locate} disabled={locating} aria-busy={locating}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="6" />
+                  <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+                  <line x1="12" y1="2" x2="12" y2="5" />
+                  <line x1="12" y1="19" x2="12" y2="22" />
+                  <line x1="2" y1="12" x2="5" y2="12" />
+                  <line x1="19" y1="12" x2="22" y2="12" />
+                </svg>
+              </button>
               <button type="button" className="icon-btn" aria-label="Search city" title="Search a city" onClick={() => setCityOpen(true)}>{'⊕'}</button>
               <button type="button" className="icon-btn" aria-label="Settings" title="Settings" onClick={() => setSettingsOpen(true)}>{'⚙'}</button>
             </div>
@@ -248,8 +330,16 @@ export function App() {
       </div>
 
       <TargetPicker open={pickerOpen} objects={objects} targetName={targetName} onPick={pick} onClose={() => setPickerOpen(false)} />
-      <CitySearch open={cityOpen} observer={observer} onSet={setPlace} onClose={() => setCityOpen(false)} />
-      <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <CitySearch open={cityOpen} observer={observer} onSet={setPlace} onLocate={locate} onClose={() => setCityOpen(false)} />
+      <Settings
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        geoEnabled={geoEnabled}
+        onGeoEnabledChange={setGeoEnabled}
+        geoSource={observer.source}
+        geoLocating={locating}
+        geoFailed={locateFailed}
+      />
     </>
   );
 }

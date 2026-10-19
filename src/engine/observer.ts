@@ -1,13 +1,15 @@
 // starnav — where the observer is standing.
-// Geolocation sensor first; if denied/unavailable, a CITY SEARCH by name (not
-// everyone knows their lat/long); then saved/default. Coords kept LOCAL; the
-// only network is the user-initiated geocoding lookup (zero-net + privacy).
+// Location (engine/geo.ts, same as bewthr): device GPS, else an approximate
+// network location; or a CITY SEARCH by name (not everyone knows their
+// lat/long); then saved/default. Coords kept LOCAL. Network use: the
+// user-initiated geocoding lookup, plus the location fallback (only when
+// location is ON and GPS failed). Location OFF sends nothing.
 
 export interface Observer {
   lat: number;
   lon: number;
   name?: string;
-  source: 'gps' | 'search' | 'default';
+  source: 'gps' | 'ip' | 'search' | 'default';
 }
 
 export interface Place {
@@ -22,21 +24,6 @@ export interface Place {
 // Greenwich (Royal Observatory) — a neutral zero-meridian default; never a real user's location.
 export const DEFAULT_OBSERVER: Observer = { lat: 51.4779, lon: -0.0015, name: 'default', source: 'default' };
 const STORE_KEY = 'starnav.observer';
-
-/** Try the on-device geolocation sensor. */
-export function geolocate({ timeoutMs = 8000 }: { timeoutMs?: number } = {}): Promise<Observer> {
-  return new Promise((resolve, reject) => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      reject(new Error('no-geolocation'));
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (p) => resolve({ lat: p.coords.latitude, lon: p.coords.longitude, source: 'gps' }),
-      (err) => reject(err),
-      { timeout: timeoutMs, maximumAge: 600000, enableHighAccuracy: false }
-    );
-  });
-}
 
 /** Accessible fallback: search a place by NAME (open-meteo geocoding, keyless). */
 export async function searchPlaces(query: string): Promise<Place[]> {

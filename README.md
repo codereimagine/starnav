@@ -62,7 +62,7 @@ npm test           # unit tests
 - **Stars & constellations:** a bright-star catalog + constellation lines baked into the engine (`src/engine/stars.ts`).
 - **Coordinate math:** sidereal time and alt-az via NOAA / Meeus formulas in `src/engine/altaz.ts`.
 - **Pointing:** `DeviceOrientationEvent` (iOS asks permission first) — a local browser sensor, no network.
-- **Location:** browser geolocation, or a city search if you prefer a name; coordinates stay on-device, never reverse-geocoded.
+- **Location:** an **on/off switch** in Settings (on by default, same as bewthr) and a **target button** in the top bar. Tap it to locate: browser geolocation, **tap-gated** (never prompts on load); if GPS is blocked or never answers, it falls back to an approximate, city-level location from your network via [ipwho.is](https://ipwho.is) — the only location-related request starnav makes (the lookup sees your IP, as any request does). Or search a city by name. GPS coordinates stay on-device, never sent or reverse-geocoded. **Switching location off is the kill switch:** nothing is acquired or sent and a located position is wiped back to the default.
 - **City search:** [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api), keyless — the only outbound call in the whole app, and only when you type it.
 - **Stack:** React 19 · TypeScript · Vite · `vite-plugin-pwa` · Vitest.
 

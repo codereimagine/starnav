@@ -105,6 +105,7 @@ export function useSettings(): UseSettingsResult {
         localStorage.removeItem('starnav.settings');
         localStorage.removeItem('starnav.observer');
         localStorage.removeItem('starnav.target');
+        localStorage.removeItem('starnav_geo_enabled');   // location switch → back to On
       } catch { /* ignore */ }
       window.location.reload();
     },

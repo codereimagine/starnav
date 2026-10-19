@@ -3,9 +3,9 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// starnav — the SPACE axis of codereimagine. Local-first, $0, zero runtime
-// network (geolocation is an on-device sensor; only user-initiated geocoding
-// hits the net), PWA, gh-pages → codereimagine/starnav.
+// starnav — the SPACE axis of codereimagine. Local-first, $0, PWA, gh-pages →
+// codereimagine/starnav. Network: user-initiated geocoding, plus the location
+// fallback (ipwho.is, only when location is ON and GPS failed — src/engine/geo.ts).
 //   base: './' (relative) so it works at the /starnav/ subpath.
 //   preview port 4280 (uptyme=4275, bewthr=4173 — each PWA its own port).
 //   allowedHosts: trycloudflare quick tunnels for on-device review.
