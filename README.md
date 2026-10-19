@@ -45,6 +45,15 @@ Most apps want your account, your data, and your attention. Every codereimagine 
 - **Find anything** — one search bar for both places and sky objects.
 - **Anywhere** — fast on phones and computers.
 
+## 🧭 How to use it
+
+1. **Open it** — tap [codereimagine.github.io/starnav](https://codereimagine.github.io/starnav/). No install, no account, nothing to sign up for.
+2. **Set your place** — tap the target button (top right), or **⊕** to search a city by name. If GPS is blocked it uses an approximate network location; switch location off any time in **⚙ → location**.
+3. **Pick something to find** — tap **browse sky** and choose a star or planet.
+4. **Find it** — tap **◎ point me** (on iPhone, allow motion access), hold your phone up to the sky and follow the cues — turn left or right, tilt up or down — until you're on target. Tap again to stop.
+5. **Make it yours** — **⚙** sets the theme, animations, tracking (Smooth or Responsive) and star labels.
+6. **Keep it** — add it to your home screen and it works offline.
+
 ## 🛠️ Run or build it yourself (developers)
 
 ```bash
