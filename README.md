@@ -4,7 +4,7 @@
 
 ### Point your phone at the sky and find out what you're looking at.
 
-$\textcolor{#A6E4FF}{\textsf{aim}}$ · $\textcolor{#F0CE96}{\textsf{bearing}}$ · $\textcolor{#7FE6C8}{\textsf{found}}$
+$\textcolor{#A6E4FF}{\textsf{space}}$ · $\textcolor{#F0CE96}{\textsf{time}}$ · $\textcolor{#7FE6C8}{\textsf{continuum}}$
 
 *No accounts, no sign-up, no ads — and your exact location never leaves your device.*
 
