@@ -2,6 +2,21 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import type { Plugin } from 'vite';
+
+// Content-Security-Policy: only this origin, plus the two network paths documented
+// below (city geocoding, ipwho.is location fallback). Fonts allow data: (one inline
+// face ships in the CSS). Build only — Vite dev injects CSS as inline <style> tags.
+const CSP = [
+  "default-src 'self'", "script-src 'self'", "style-src 'self'", "font-src 'self' data:", "img-src 'self'",
+  "connect-src 'self' https://geocoding-api.open-meteo.com https://ipwho.is",
+  "manifest-src 'self'", "worker-src 'self'", "base-uri 'self'", "form-action 'none'", "object-src 'none'",
+].join('; ');
+const csp = (): Plugin => ({
+  name: 'csp-meta',
+  apply: 'build',
+  transformIndexHtml: (html) => html.replace(/<meta charset="UTF-8" \/>/, `$&\n    <meta http-equiv="Content-Security-Policy" content="${CSP}" />`),
+});
 
 // starnav — the SPACE axis of codereimagine. Local-first, $0, PWA, gh-pages →
 // codereimagine/starnav. Network: user-initiated geocoding, plus the location
@@ -14,6 +29,7 @@ export default defineConfig({
   server: { allowedHosts: ['.trycloudflare.com'] },
   preview: { port: 4280, strictPort: true, allowedHosts: ['.trycloudflare.com'] },
   plugins: [
+    csp(),
     react(),
     VitePWA({
       // 'prompt' = the new SW installs but waits for the user to confirm via the
