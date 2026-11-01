@@ -196,8 +196,6 @@ body {
 .settings-update-check:disabled { opacity: 0.6; cursor: default; }
 .settings-update-note, .settings-note { font-family: var(--mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; line-height: 1.5; margin-top: 8px; }
 .set-results { display: flex; flex-direction: column; gap: 4px; margin-top: 11px; }
-.set-foot { text-align: center; font-size: 9px; letter-spacing: 1.5px; color: var(--dim); text-transform: uppercase; padding-top: 8px; }
-.set-foot .a { color: var(--cyan); }
 
 /* chip rows (theme / animations — uptyme/bewthr pattern) */
 .settings-chip-row { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }

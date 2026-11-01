@@ -163,10 +163,6 @@ export function Settings({ open, onClose, geoEnabled, onGeoEnabledChange, geoSou
             Reset all to defaults
           </button>
         </div>
-
-        <div className="settings-section">
-          <div className="set-foot">star<span className="a">nav</span> · built with claude opus</div>
-        </div>
       </div>
     </div>
   );
